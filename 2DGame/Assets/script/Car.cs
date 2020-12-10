@@ -42,5 +42,56 @@ public class Car : MonoBehaviour
 
         weight = 1.3f;
         haswindow = false;
+
+        methodA();
+
+        int intA = methodB();
+        print("數字:"+intA);
+
+        float floatA = methodC();
+        print("PI:"+floatA);
+
+        Vector3 v123 = ver3();
+        print("三圍座標:" + v123);
+
+        methodD(10);
+
+        float b =BMI(57, 172);
+        print("BMI值:" + b);
+
+        drive(100);
+        drive(80);
+        drive(50,"後方");
+    }
+    private void methodA()
+    {
+        print("QQ");
+    }
+    private int methodB()
+    {
+        return  123;
+    }
+    private float methodC()
+    {
+        return 1.5f;
+    }
+    private Vector3 ver3()
+    {
+        return new Vector3(1, 2, 3);
+    }
+    private void methodD(int number)
+    {
+        number += 10;
+        print("累加後的數字:" + number);
+    }
+    private float BMI(float w, float h)
+    {
+        float bmi = w / (h * h);
+        return bmi;
+    }
+    private void drive(int speed, string direction = "前方")
+    {
+        print("時速:" + speed);
+        print("方向:" + direction);
     }
 }
