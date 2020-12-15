@@ -1,21 +1,37 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class ManuManager : MonoBehaviour
 {
+    public void Delaystartgame()
+    {
+        
+        Invoke("startgame", 1.5f);
+    }
+    public void Delayexitgame()
+    {
+        Invoke("exitgame", 1.5f);
+    }
+
+    public void ChangeImage()
+    {
+        image.GetComponent<RawImage>
+    }
     /// <summary>
     /// 開始遊戲
     /// </summary>
-    public void startgame()
+    private void startgame()
     {
-
+        SceneManager.LoadScene("遊戲場景");
     }
+
 
     /// <summary>
     /// 離開遊戲
     /// </summary>
-    public void exitgame()
+    private void exitgame()
     {
+        Application.Quit();
     }
+    
 }
