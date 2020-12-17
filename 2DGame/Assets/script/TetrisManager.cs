@@ -20,15 +20,39 @@ public class TetrisManager : MonoBehaviour
     public AudioClip soundclip;
     [Header("遊戲結束音效")]
     public AudioClip soundgameover;
-
+    [Header("下一個俄羅斯方塊")]
+    public Transform traNextArea;
+    [Header("畫布")]
+    public Transform tranConver;
     /// <summary>
     /// 生成方塊
     /// </summary>
-    private void generate()
+    public int indexNext;
+    private void Start()
     {
-        
+        Randomtetris();
+       
     }
+    private void Randomtetris()
+    {
+      indexNext=Random.Range(0, 7);
+      traNextArea.GetChild(indexNext).gameObject.SetActive(true);    
+    }
+    public void Startgame()
+    {
+        GameObject tetris = traNextArea.GetChild(indexNext).gameObject;
+        GameObject current= Instantiate(tetris,tranConver);
 
+        current.GetComponent<RectTransform>().anchoredPosition = new Vector2(-40, 360);
+
+        tetris.SetActive(false);
+        
+        Randomtetris();
+
+    }
+    
+
+   
     /// <summary>
     /// 添加分數
     /// </summary>
@@ -69,5 +93,5 @@ public class TetrisManager : MonoBehaviour
     {
     }
 
-
+    
 }

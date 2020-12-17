@@ -15,7 +15,7 @@ public class APIstatic : MonoBehaviour
 
         print("隨機範圍1-100:"+Random.Range(1 , 100));
 
-        Application.OpenURL("https://www.google.com/");
+        //Application.OpenURL("https://www.google.com/");
 
         print("10.11去小數點後:"+ Mathf.Floor(10.11f));
     }

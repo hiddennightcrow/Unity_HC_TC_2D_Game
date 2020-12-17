@@ -3,20 +3,19 @@ using UnityEngine;
 
 public class ManuManager : MonoBehaviour
 {
+    
     public void Delaystartgame()
     {
-        
+       
         Invoke("startgame", 1.5f);
     }
     public void Delayexitgame()
     {
+
         Invoke("exitgame", 1.5f);
     }
 
-    public void ChangeImage()
-    {
-        image.GetComponent<RawImage>
-    }
+   
     /// <summary>
     /// 開始遊戲
     /// </summary>
