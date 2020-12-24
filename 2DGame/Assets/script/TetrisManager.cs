@@ -24,17 +24,30 @@ public class TetrisManager : MonoBehaviour
     public Transform traNextArea;
     [Header("畫布")]
     public Transform tranConver;
+    [Header("生成的起始位置")]
+    public Vector2[] posSpawn =
+        {
+        new Vector2(0,320),
+        new Vector2(0,340),
+        new Vector2(20,340),
+        new Vector2(0,360),
+        new Vector2(0,360),
+        new Vector2(-20,340),
+        new Vector2(20,340)
+   };
+
+ 
     /// <summary>
     /// 生成方塊
     /// </summary>
     public int indexNext;
     public RectTransform currentTeris;
     public float timer;
-    
+
     private void Start()
     {
         Randomtetris();
-       
+
 
     }
     private void Randomtetris()
@@ -49,7 +62,7 @@ public class TetrisManager : MonoBehaviour
         GameObject tetris = traNextArea.GetChild(indexNext).gameObject;
         GameObject current = Instantiate(tetris, tranConver);
 
-        current.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 360);
+        current.GetComponent<RectTransform>().anchoredPosition = posSpawn[indexNext];
 
         tetris.SetActive(false);
 
@@ -70,35 +83,50 @@ public class TetrisManager : MonoBehaviour
             if (timer >= speed)
             {
                 timer = 0;
-            currentTeris.anchoredPosition -= new Vector2(0, 50);
+                currentTeris.anchoredPosition -= new Vector2(0, 40);
             }
-        }
 
-        #region 方塊左右、旋轉、加速
-        if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            currentTeris.anchoredPosition += new Vector2(-50, 0);
-        }
-        if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            currentTeris.anchoredPosition += new Vector2(50, 0);
-        }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            currentTeris.eulerAngles += new Vector3(0, 0, 90);
-        }
-        if (Input.GetKey(KeyCode.W))
-        {
-            speed = 0.2f;
-        }
-        else
-        {
-            speed = 1.5f;
-        }
-        #endregion
-        if (currentTeris.anchoredPosition.y == -350)
-        {
-            Startgame();
+            if (currentTeris.anchoredPosition.x < 250)
+            {
+                if  (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+                    {
+                        currentTeris.anchoredPosition += new Vector2(40, 0);
+                    }
+            }
+            if (currentTeris.anchoredPosition.x > -250)
+            {
+                if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+                {
+                    currentTeris.anchoredPosition += new Vector2(40, 0);
+                }
+            }
+
+            #region 方塊左右、旋轉、加速
+            if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                currentTeris.anchoredPosition += new Vector2(-50, 0);
+            }
+            if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                currentTeris.anchoredPosition += new Vector2(50, 0);
+            }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                currentTeris.eulerAngles += new Vector3(0, 0, 90);
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+                speed = 0.2f;
+            }
+            else
+            {
+                speed = 1.5f;
+            }
+            #endregion
+            if (currentTeris.anchoredPosition.y == -300)
+            {
+                Startgame();
+            }
         }
     }
 
