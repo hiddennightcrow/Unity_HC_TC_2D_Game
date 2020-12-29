@@ -36,7 +36,7 @@ public class TetrisManager : MonoBehaviour
         new Vector2(20,340)
    };
 
- 
+
     /// <summary>
     /// 生成方塊
     /// </summary>
@@ -86,44 +86,45 @@ public class TetrisManager : MonoBehaviour
                 currentTeris.anchoredPosition -= new Vector2(0, 40);
             }
 
-            if (currentTeris.anchoredPosition.x < 250)
+
+
+
+            #region 方塊左右、旋轉、加速
+            Tetris tetris = currentTeris.GetComponent<Tetris>();
+            if (!tetris.wallRight)
             {
-                if  (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
-                    {
-                        currentTeris.anchoredPosition += new Vector2(40, 0);
-                    }
-            }
-            if (currentTeris.anchoredPosition.x > -250)
-            {
-                if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+
+                if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
                 {
                     currentTeris.anchoredPosition += new Vector2(40, 0);
                 }
+
             }
 
-            #region 方塊左右、旋轉、加速
-            if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+            if (!tetris.wallLeft)
             {
-                currentTeris.anchoredPosition += new Vector2(-50, 0);
-            }
-            if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
-            {
-                currentTeris.anchoredPosition += new Vector2(50, 0);
+                if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+                {
+                    currentTeris.anchoredPosition -= new Vector2(40, 0);
+                }
             }
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 currentTeris.eulerAngles += new Vector3(0, 0, 90);
             }
-            if (Input.GetKey(KeyCode.S))
-            {
-                speed = 0.2f;
-            }
-            else
-            {
-                speed = 1.5f;
-            }
+            
+                if (Input.GetKey(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+                {
+                    speed = 0.2f;
+                }
+
+                else
+                {
+                    speed = 1.5f;
+                }
+            
             #endregion
-            if (currentTeris.anchoredPosition.y == -300)
+           if (tetris.floor)
             {
                 Startgame();
             }
