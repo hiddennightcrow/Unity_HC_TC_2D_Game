@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class TetrisManager : MonoBehaviour
 {
@@ -22,8 +23,8 @@ public class TetrisManager : MonoBehaviour
     public AudioClip soundgameover;
     [Header("下一個俄羅斯方塊")]
     public Transform traNextArea;
-    [Header("畫布")]
-    public Transform tranConver;
+    [Header("生成俄羅斯方塊的父物件")]
+    public Transform traTetrisParent;
     [Header("生成的起始位置")]
     public Vector2[] posSpawn =
         {
@@ -54,13 +55,14 @@ public class TetrisManager : MonoBehaviour
     {
 
         indexNext = Random.Range(0, 7);
+  
         traNextArea.GetChild(indexNext).gameObject.SetActive(true);
 
     }
     public void Startgame()
     {
         GameObject tetris = traNextArea.GetChild(indexNext).gameObject;
-        GameObject current = Instantiate(tetris, tranConver);
+        GameObject current = Instantiate(tetris, traTetrisParent);
 
         current.GetComponent<RectTransform>().anchoredPosition = posSpawn[indexNext];
 
@@ -74,6 +76,10 @@ public class TetrisManager : MonoBehaviour
     private void Update()
     {
         ControlTertis();
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            StartCoroutine(ShakeEffect());
+        }
     }
     private void ControlTertis()
     {
@@ -108,9 +114,14 @@ public class TetrisManager : MonoBehaviour
                     currentTeris.anchoredPosition -= new Vector2(40, 0);
                 }
             }
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (tetris.canRotate)
             {
-                currentTeris.eulerAngles += new Vector3(0, 0, 90);
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    currentTeris.eulerAngles += new Vector3(0, 0, 90);
+
+                    tetris.Offset();
+                }
             }
             
                 if (Input.GetKey(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
@@ -172,5 +183,22 @@ public class TetrisManager : MonoBehaviour
     {
     }
 
+    private IEnumerator ShakeEffect()
+    {
 
+
+        RectTransform rect = traTetrisParent.GetComponent < RectTransform> ();
+
+
+            float interval = 0.05f;
+            rect.anchoredPosition += Vector2.up * 30;
+        yield return new WaitForSeconds(interval);
+        rect.anchoredPosition = Vector2.zero;
+        yield return new WaitForSeconds(interval);
+        rect.anchoredPosition += Vector2.up * 20;
+        yield return new WaitForSeconds(interval);
+        rect.anchoredPosition = Vector2.zero;
+        yield return new WaitForSeconds(interval);
+    }
+    
 }

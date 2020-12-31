@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
 
 public class Tetris : MonoBehaviour
@@ -12,9 +11,27 @@ public class Tetris : MonoBehaviour
     public int offx;
     [Header("旋轉位移:上下")]
     public float offy;
+    [Header("偵測是否能旋轉")]
+    public float lengthRotate0r;
+    public float lengthRotate0l;
 
+    public float lengthRotate90r;
+    public float lengthRotate90l;
+
+
+
+    public bool wallRight;
+    public bool wallLeft;
+    public bool floor;
+    public bool canRotate = true;
+
+    private RectTransform rect;
+    
     private float length;
    private float lengthdown;
+    private float lengthRotateR;
+    private float lengthRotateL;
+
     private void OnDrawGizmos()
     {
         
@@ -32,6 +49,13 @@ public class Tetris : MonoBehaviour
             Gizmos.color = Color.green;
             Gizmos.DrawRay(transform.position, -Vector3.up * length90);
 
+            lengthRotateR = lengthRotate0r;
+            lengthRotateL = lengthRotate0l;
+            Gizmos.color = Color.blue;
+            Gizmos.DrawRay(transform.position, Vector3.right * lengthRotate0r);
+            Gizmos.DrawRay(transform.position, -Vector3.right * lengthRotate0l);
+
+
 
 
         }
@@ -47,19 +71,27 @@ public class Tetris : MonoBehaviour
             Gizmos.color = Color.green;
             Gizmos.DrawRay(transform.position, -Vector3.up * length0);
 
+            lengthRotateR = lengthRotate90r;
+            lengthRotateL = lengthRotate90l;
+            Gizmos.color = Color.blue;
+            Gizmos.DrawRay(transform.position, Vector3.right * lengthRotate90r);
+            Gizmos.DrawRay(transform.position, -Vector3.right * lengthRotate90l);
+
+
         }
     }
-    public bool wallRight;
-    public bool wallLeft;
-    public bool floor;
+    
 
     private void Update()
     {
         CheckWall();
+       
     }
     private void Start()
     {
         length = length0;
+
+        rect = GetComponent<RectTransform>();
     }
     private void CheckWall()
     {
@@ -73,6 +105,7 @@ public class Tetris : MonoBehaviour
         {
             wallRight = false;
         }
+        
         RaycastHit2D hit1 = Physics2D.Raycast(transform.position, -Vector3.right, length, 1 << 8);
         if (hit1 && hit1.transform.name == "牆:左邊")
         {
@@ -83,6 +116,20 @@ public class Tetris : MonoBehaviour
         {
             wallLeft= false;
         }
+        RaycastHit2D hitRotateR = Physics2D.Raycast(transform.position, Vector3.right,  lengthRotateR, 1 << 8);
+        RaycastHit2D hitRotateL = Physics2D.Raycast(transform.position, -Vector3.right, lengthRotateL, 1 << 8);
+        if (hitRotateR && hitRotateR.transform.name == "牆:右邊"|| hitRotateL && hitRotateL.transform.name == "牆:左邊")
+        {
+            canRotate = true;
+
+        }
+        else
+        {
+            canRotate = false;
+        }
+
+
+
         RaycastHit2D hit2 = Physics2D.Raycast(transform.position, -Vector3.up, lengthdown, 1 << 9);
         if (hit2 && hit2.transform.name == "地板")
         {
@@ -91,4 +138,17 @@ public class Tetris : MonoBehaviour
         }
         
     }
+    public void Offset()
+    {
+        int z = (int)transform.eulerAngles.z;
+        if (z == 90 || z == 270)
+        {
+            rect.anchoredPosition -= new Vector2(offx, offy);
+        }
+        else if(z==0||z==180)
+            {
+           rect.anchoredPosition += new Vector2(offx, offy);
+        }
+    }
+    
 }

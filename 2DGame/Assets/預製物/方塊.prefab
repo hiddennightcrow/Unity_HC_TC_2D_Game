@@ -54,6 +54,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   length0: 0.7
   length90: 0.7
+  offx: 0
+  offy: 0
+  lengthRotate0r: 0.7
+  lengthRotate0l: 0.7
+  lengthRotate90r: 0.7
+  lengthRotate90l: 0.7
+  wallRight: 0
+  wallLeft: 0
+  floor: 0
+  canRotate: 1
 --- !u!1 &4585791699106772394
 GameObject:
   m_ObjectHideFlags: 0

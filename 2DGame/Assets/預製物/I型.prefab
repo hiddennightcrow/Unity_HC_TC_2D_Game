@@ -452,5 +452,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93e22a5f0c3d497448a989986c964167, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  length0: 1.3
-  length90: 0.5
+  length0: 1.2
+  length90: 0.4
+  offx: 20
+  offy: 20
+  lengthRotate0r: 1.2
+  lengthRotate0l: 1.2
+  lengthRotate90r: 1
+  lengthRotate90l: 0.6
+  wallRight: 0
+  wallLeft: 0
+  floor: 0
+  canRotate: 1
