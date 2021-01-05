@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Tetris : MonoBehaviour
 {
+    #region 欄位
     [Header("角度為零，線條的長度")]
     public float length0;
     [Header("角度為90，線條的長度")]
@@ -31,10 +32,15 @@ public class Tetris : MonoBehaviour
    private float lengthdown;
     private float lengthRotateR;
     private float lengthRotateL;
+    #endregion
 
+    [Header("每一顆小方塊的射線長度"), Range(0f, 2f)]
+    public float smallLength = 0.5f;
+
+    #region 事件
     private void OnDrawGizmos()
     {
-        
+        #region 判定牆壁和地板
         int z = (int)transform.eulerAngles.z;
 
         if (z == 0 || z == 180)
@@ -79,12 +85,23 @@ public class Tetris : MonoBehaviour
 
 
         }
-    }
-    
+        #endregion
+        #region 每一顆判定
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Gizmos.color = Color.white;
+            Gizmos.DrawRay(transform.GetChild(i).position, Vector2.down * smallLength);
+        }
 
+        #endregion
+
+    }
+
+    
     private void Update()
     {
         CheckWall();
+        CheckBottom();
        
     }
     private void Start()
@@ -93,6 +110,20 @@ public class Tetris : MonoBehaviour
 
         rect = GetComponent<RectTransform>();
     }
+    #endregion
+    public bool smallBottom;
+
+    private void CheckBottom()
+    {
+        //迴圈執行每一顆方塊
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            //每一顆小方塊 射線(每一顆小方塊的中心點,長度,圖層)
+            RaycastHit2D hit = Physics2D.Raycast(transform.GetChild(i).position, Vector3.right, length, 1 << 8);
+            if(hit&&hit.collider.name=="方塊")smallBottom=true;
+        }
+    }
+    #region 方法
     private void CheckWall()
     {
         RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector3.right, length, 1 << 8);
@@ -150,5 +181,6 @@ public class Tetris : MonoBehaviour
            rect.anchoredPosition += new Vector2(offx, offy);
         }
     }
-    
+    #endregion
+
 }

@@ -157,7 +157,7 @@ public class TetrisManager : MonoBehaviour
             }
 
             #endregion
-            if (tetris.floor)
+            if (tetris.floor||tetris.smallBottom)
             {
                 SetGround();
                 Startgame();
@@ -167,11 +167,11 @@ public class TetrisManager : MonoBehaviour
     }
     private void SetGround()
     {
-        int count = currentTeris.childCount;
-        for (int x = 0; x < count; x++)
+        int count = currentTeris.childCount;//取得 目前 方塊 的子物件數量
+        for (int x = 0; x < count; x++)//迴圈 執行 子物件數量次數
         {
-            currentTeris.GetChild(x).name = "地板";
-            currentTeris.GetChild(x).gameObject.layer = 9;
+            currentTeris.GetChild(x).name = "方塊";//名稱改為方塊
+            currentTeris.GetChild(x).gameObject.layer = 10;//圖層改為方塊
         }
     }
 
