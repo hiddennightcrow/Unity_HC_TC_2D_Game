@@ -55,12 +55,14 @@ public class TetrisManager : MonoBehaviour
     {
 
         indexNext = Random.Range(0, 7);
-  
+
         traNextArea.GetChild(indexNext).gameObject.SetActive(true);
 
     }
     public void Startgame()
     {
+        fastDown = false;
+
         GameObject tetris = traNextArea.GetChild(indexNext).gameObject;
         GameObject current = Instantiate(tetris, traTetrisParent);
 
@@ -73,13 +75,28 @@ public class TetrisManager : MonoBehaviour
         currentTeris = current.GetComponent<RectTransform>();
 
     }
-    private void Update()
+    private bool fastDown;
+    private void Fastdown()
+    {
+        if (currentTeris && !fastDown)
+        {
+            if (currentTeris)
+            {
+                if (Input.GetKeyDown(KeyCode.Z))
+                {
+                    fastDown = true;
+                    speed = 0.018f;
+                    
+                }
+
+            }
+        }
+    }
+        private void Update()
     {
         ControlTertis();
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            StartCoroutine(ShakeEffect());
-        }
+        
+        Fastdown();
     }
     private void ControlTertis()
     {
@@ -123,25 +140,40 @@ public class TetrisManager : MonoBehaviour
                     tetris.Offset();
                 }
             }
-            
-                if (Input.GetKey(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
-                {
-                    speed = 0.2f;
-                }
 
-                else
-                {
-                    speed = 1.5f;
-                }
-            
-            #endregion
-           if (tetris.floor)
+            if (!fastDown)
             {
+                if (Input.GetKey(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                speed = 0.2f;
+            }
+
+            else
+            {
+                speed = 1.5f;
+            }
+            
+                
+            }
+
+            #endregion
+            if (tetris.floor)
+            {
+                SetGround();
                 Startgame();
+                StartCoroutine(ShakeEffect());
             }
         }
     }
-
+    private void SetGround()
+    {
+        int count = currentTeris.childCount;
+        for (int x = 0; x < count; x++)
+        {
+            currentTeris.GetChild(x).name = "地板";
+            currentTeris.GetChild(x).gameObject.layer = 9;
+        }
+    }
 
     /// <summary>
     /// 添加分數
@@ -187,11 +219,11 @@ public class TetrisManager : MonoBehaviour
     {
 
 
-        RectTransform rect = traTetrisParent.GetComponent < RectTransform> ();
+        RectTransform rect = traTetrisParent.GetComponent<RectTransform>();
 
 
-            float interval = 0.05f;
-            rect.anchoredPosition += Vector2.up * 30;
+        float interval = 0.05f;
+        rect.anchoredPosition += Vector2.up * 30;
         yield return new WaitForSeconds(interval);
         rect.anchoredPosition = Vector2.zero;
         yield return new WaitForSeconds(interval);
@@ -200,5 +232,5 @@ public class TetrisManager : MonoBehaviour
         rect.anchoredPosition = Vector2.zero;
         yield return new WaitForSeconds(interval);
     }
-    
+
 }
