@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Linq;
 using System.Collections;
 
 public class TetrisManager : MonoBehaviour
@@ -92,6 +93,21 @@ public class TetrisManager : MonoBehaviour
             }
         }
     }
+
+    [Header("分數判定區域")]
+    public Transform traScoreArea;
+    public RectTransform[] rectSmall;
+    private void CheckTetris()
+    {
+        rectSmall = new RectTransform[traScoreArea.childCount];
+        for (int i = 0; i < traScoreArea.childCount; i++)
+        {
+            rectSmall[i] = traScoreArea.GetChild(i).GetComponent<RectTransform>();
+        }
+
+        var small = rectSmall.Where(x => x.anchoredPosition.y == -300);
+    }
+
         private void Update()
     {
         ControlTertis();
@@ -114,7 +130,7 @@ public class TetrisManager : MonoBehaviour
 
             #region 方塊左右、旋轉、加速
             Tetris tetris = currentTeris.GetComponent<Tetris>();
-            if (!tetris.wallRight|| !tetris.smallRight)
+            if (!tetris.wallRight && !tetris.smallRight)
             {
 
                 if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
@@ -124,7 +140,7 @@ public class TetrisManager : MonoBehaviour
 
             }
 
-            if (!tetris.wallLeft)
+            if (!tetris.wallLeft && !tetris.smallLeft)
             {
                 if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
                 {
@@ -160,6 +176,7 @@ public class TetrisManager : MonoBehaviour
             if (tetris.floor||tetris.smallBottom)
             {
                 SetGround();
+                CheckTetris();
                 Startgame();
                 StartCoroutine(ShakeEffect());
             }
@@ -173,6 +190,8 @@ public class TetrisManager : MonoBehaviour
             currentTeris.GetChild(x).name = "方塊";//名稱改為方塊
             currentTeris.GetChild(x).gameObject.layer = 10;//圖層改為方塊
         }
+        for (int i = 0; i < currentTeris.childCount; i++) currentTeris.GetChild(0).SetParent(traScoreArea);
+        Destroy(currentTeris.gameObject);
     }
 
     /// <summary>

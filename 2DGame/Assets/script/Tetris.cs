@@ -1,5 +1,6 @@
 ﻿
 using UnityEngine;
+using System.Linq;
 
 public class Tetris : MonoBehaviour
 {
@@ -27,15 +28,15 @@ public class Tetris : MonoBehaviour
     public bool canRotate = true;
 
     private RectTransform rect;
-    
+
     private float length;
-   private float lengthdown;
+    private float lengthdown;
     private float lengthRotateR;
     private float lengthRotateL;
     #endregion
 
     [Header("每一顆小方塊的射線長度"), Range(0f, 2f)]
-    public float smallLength = 0.5f;
+    public float smallLength = 0.8f;
 
     #region 事件
     private void OnDrawGizmos()
@@ -97,6 +98,8 @@ public class Tetris : MonoBehaviour
         {
             Gizmos.color = Color.cyan;
             Gizmos.DrawRay(transform.GetChild(i).position, Vector2.right * smallLength);
+            Gizmos.DrawRay(transform.GetChild(i).position, Vector2.left * smallLength);
+
 
         }
 
@@ -109,17 +112,27 @@ public class Tetris : MonoBehaviour
     {
         CheckWall();
         CheckBottom();
-       
+        CheckLeftAndRight();
     }
     private void Start()
     {
         length = length0;
 
         rect = GetComponent<RectTransform>();
+        //偵測有幾個子物件(小方塊)就新增幾個陣列
+        smallRightAll = new bool[transform.childCount];
+        smallLeftAll = new bool[transform.childCount];
     }
     #endregion
     public bool smallBottom;
     public bool smallRight;
+    public bool smallLeft;
+
+
+    //所有方塊右邊是否有其他方塊
+    public bool[] smallRightAll;
+    public bool[] smallLeftAll;
+
 
     private void CheckLeftAndRight()
     {
@@ -127,10 +140,19 @@ public class Tetris : MonoBehaviour
         for (int i = 0; i < transform.childCount; i++)
         {
             //每一顆小方塊 射線(每一顆小方塊的中心點,長度,圖層)
-            RaycastHit2D hit = Physics2D.Raycast(transform.GetChild(i).position, Vector3.right, smallLength, 1 << 10);
-            if (hit && hit.collider.name == "方塊") smallRight = true;
-            else smallRight = false;
+            RaycastHit2D hitR = Physics2D.Raycast(transform.GetChild(i).position, Vector3.right, smallLength, 1 << 10);
+            if (hitR && hitR.collider.name =="方塊") smallRightAll[i] = true;
+            else smallRightAll[i] = false;
+
+
+            RaycastHit2D hitL = Physics2D.Raycast(transform.GetChild(i).position, Vector3.left, smallLength, 1 << 10);
+            if (hitL && hitL.collider.name =="方塊") smallLeftAll[i] = true;
+            else smallLeftAll[i] = false;
         }
+        var allRight =  smallRightAll.Where(x => x == true);
+        smallRight = allRight.ToArray().Length > 0;
+        var allLeft = smallLeftAll.Where(x => x == true);
+        smallLeft = allLeft.ToArray().Length > 0;
     }
 
     private void CheckBottom()
@@ -140,7 +162,8 @@ public class Tetris : MonoBehaviour
         {
             //每一顆小方塊 射線(每一顆小方塊的中心點,長度,圖層)
             RaycastHit2D hit = Physics2D.Raycast(transform.GetChild(i).position, Vector3.down, smallLength, 1 << 10);
-            if(hit&&hit.collider.name=="方塊")smallBottom=true;
+            if(hit&&hit.collider.name =="方塊") smallBottom=true;
+
         }
     }
     #region 方法
