@@ -92,12 +92,19 @@ public class Tetris : MonoBehaviour
             Gizmos.color = Color.white;
             Gizmos.DrawRay(transform.GetChild(i).position, Vector2.down * smallLength);
         }
+        for (int i = 0; i < transform.childCount; i++)
+
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawRay(transform.GetChild(i).position, Vector2.right * smallLength);
+
+        }
 
         #endregion
 
     }
 
-    
+
     private void Update()
     {
         CheckWall();
@@ -112,6 +119,19 @@ public class Tetris : MonoBehaviour
     }
     #endregion
     public bool smallBottom;
+    public bool smallRight;
+
+    private void CheckLeftAndRight()
+    {
+        //迴圈執行每一顆方塊
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            //每一顆小方塊 射線(每一顆小方塊的中心點,長度,圖層)
+            RaycastHit2D hit = Physics2D.Raycast(transform.GetChild(i).position, Vector3.right, smallLength, 1 << 10);
+            if (hit && hit.collider.name == "方塊") smallRight = true;
+            else smallRight = false;
+        }
+    }
 
     private void CheckBottom()
     {
@@ -119,7 +139,7 @@ public class Tetris : MonoBehaviour
         for (int i = 0; i < transform.childCount; i++)
         {
             //每一顆小方塊 射線(每一顆小方塊的中心點,長度,圖層)
-            RaycastHit2D hit = Physics2D.Raycast(transform.GetChild(i).position, Vector3.right, length, 1 << 8);
+            RaycastHit2D hit = Physics2D.Raycast(transform.GetChild(i).position, Vector3.down, smallLength, 1 << 10);
             if(hit&&hit.collider.name=="方塊")smallBottom=true;
         }
     }

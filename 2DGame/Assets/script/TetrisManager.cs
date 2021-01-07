@@ -114,7 +114,7 @@ public class TetrisManager : MonoBehaviour
 
             #region 方塊左右、旋轉、加速
             Tetris tetris = currentTeris.GetComponent<Tetris>();
-            if (!tetris.wallRight)
+            if (!tetris.wallRight|| !tetris.smallRight)
             {
 
                 if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
