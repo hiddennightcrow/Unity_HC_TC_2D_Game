@@ -36,7 +36,7 @@ public class Tetris : MonoBehaviour
     #endregion
 
     [Header("每一顆小方塊的射線長度"), Range(0f, 2f)]
-    public float smallLength = 0.8f;
+    public float smallLength = 0.5f;
 
     #region 事件
     private void OnDrawGizmos()
@@ -194,12 +194,12 @@ public class Tetris : MonoBehaviour
         RaycastHit2D hitRotateL = Physics2D.Raycast(transform.position, -Vector3.right, lengthRotateL, 1 << 8);
         if (hitRotateR && hitRotateR.transform.name == "牆:右邊"|| hitRotateL && hitRotateL.transform.name == "牆:左邊")
         {
-            canRotate = true;
+            canRotate = false;
 
         }
         else
         {
-            canRotate = false;
+            canRotate = true;
         }
 
 

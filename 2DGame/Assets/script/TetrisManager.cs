@@ -57,7 +57,7 @@ public class TetrisManager : MonoBehaviour
     {
 
         indexNext = Random.Range(0, 7);
-
+        indexNext = 0;
         traNextArea.GetChild(indexNext).gameObject.SetActive(true);
 
     }
@@ -98,7 +98,12 @@ public class TetrisManager : MonoBehaviour
     [Header("分數判定區域")]
     public Transform traScoreArea;
     public RectTransform[] rectSmall;
-    private void CheckTetris()
+
+
+    public bool[] destoryRow = new bool[17];
+    public float[] downHeight;
+
+    private IEnumerator CheckTetris()
     {
         rectSmall = new RectTransform[traScoreArea.childCount];
         for (int i = 0; i < traScoreArea.childCount; i++)
@@ -106,28 +111,66 @@ public class TetrisManager : MonoBehaviour
             rectSmall[i] = traScoreArea.GetChild(i).GetComponent<RectTransform>();
         }
 
-        var small = rectSmall.Where(x => x.anchoredPosition.y == -300);
-        if (small.ToArray().Length == 16)
+        int row = 17;
+        for (int i = 0; i < row; i++)
         {
-            
+
+            float bottom = -320;
+            float step = 40;
+            var small = rectSmall.Where(x => x.anchoredPosition.y >= bottom + step * i - 10 && x.anchoredPosition.y <= bottom + step * i + 10);
+            if (small.ToArray().Length == 16)
+            {
+               yield return StartCoroutine(Shine(small.ToArray()));
+                destoryRow[i] = true;
+            }
+        }
+        downHeight = new float[traScoreArea.childCount];
+        for (int i = 0; i < downHeight.Length; i++) downHeight[i] = 0;
+
+        for (int i = 0; i < destoryRow.Length; i++)
+        {
+            if (!destoryRow[i]) continue;
+            for (int j = 0; j < rectSmall.Length; j++)
+            {
+                if (rectSmall[j].anchoredPosition.y > -300 + 40 * i - 10)
+                {
+                    downHeight[j] -= 40;
+                }
+            }
+            destoryRow[i] = false;
+        }
+        for (int i = 0; i < rectSmall.Length; i++)
+        {
+            rectSmall[i].anchoredPosition += Vector2.up * downHeight[i];
         }
     }
-    private IEnumerable Shine(RectTransform[] smalls)
+    private IEnumerator Shine(RectTransform[] smalls)
     {
-        for (int i = 0; i < 16; i++)
-        {
+        
             float interval = 0.05f;
-            smalls[i].GetComponent<Image>().enabled = false;
+            for (int i = 0; i < 16; i++) smalls[i].GetComponent<Image>().enabled = false;
             yield return new WaitForSeconds(interval);
-            smalls[i].GetComponent<Image>().enabled = true;
+        for (int i = 0; i < 16; i++) smalls[i].GetComponent<Image>().enabled = true;
             yield return new WaitForSeconds(interval);
-            smalls[i].GetComponent<Image>().enabled = false;
+        for (int i = 0; i < 16; i++) smalls[i].GetComponent<Image>().enabled = false;
             yield return new WaitForSeconds(interval);
-            smalls[i].GetComponent<Image>().enabled = true;
-            yield return new WaitForSeconds(interval);
+        for (int i = 0; i < 16; i++) smalls[i].GetComponent<Image>().enabled = true;
+
+
+        yield return new WaitForSeconds(interval);
+        for (int i = 0; i < 16; i++) Destroy(smalls[i].gameObject);
+
+        yield return new WaitForSeconds(interval);
+        rectSmall = new RectTransform[traScoreArea.childCount];
+        for (int i = 0; i < traScoreArea.childCount; i++)
+        {
+            rectSmall[i] = traScoreArea.GetChild(i).GetComponent<RectTransform>();
         }
+
+
+
     }
-        private void Update()
+    private void Update()
     {
         ControlTertis();
         
@@ -195,7 +238,7 @@ public class TetrisManager : MonoBehaviour
             if (tetris.floor||tetris.smallBottom)
             {
                 SetGround();
-                CheckTetris();
+                StartCoroutine(CheckTetris());
                 Startgame();
                 StartCoroutine(ShakeEffect());
             }
@@ -209,7 +252,7 @@ public class TetrisManager : MonoBehaviour
             currentTeris.GetChild(x).name = "方塊";//名稱改為方塊
             currentTeris.GetChild(x).gameObject.layer = 10;//圖層改為方塊
         }
-        for (int i = 0; i < currentTeris.childCount; i++) currentTeris.GetChild(0).SetParent(traScoreArea);
+        for (int i = 0; i < count; i++) currentTeris.GetChild(0).SetParent(traScoreArea);
         Destroy(currentTeris.gameObject);
     }
 
