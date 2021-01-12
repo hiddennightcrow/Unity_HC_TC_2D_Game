@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Linq;
 using System.Collections;
 
@@ -106,8 +107,26 @@ public class TetrisManager : MonoBehaviour
         }
 
         var small = rectSmall.Where(x => x.anchoredPosition.y == -300);
+        if (small.ToArray().Length == 16)
+        {
+            
+        }
     }
-
+    private IEnumerable Shine(RectTransform[] smalls)
+    {
+        for (int i = 0; i < 16; i++)
+        {
+            float interval = 0.05f;
+            smalls[i].GetComponent<Image>().enabled = false;
+            yield return new WaitForSeconds(interval);
+            smalls[i].GetComponent<Image>().enabled = true;
+            yield return new WaitForSeconds(interval);
+            smalls[i].GetComponent<Image>().enabled = false;
+            yield return new WaitForSeconds(interval);
+            smalls[i].GetComponent<Image>().enabled = true;
+            yield return new WaitForSeconds(interval);
+        }
+    }
         private void Update()
     {
         ControlTertis();
