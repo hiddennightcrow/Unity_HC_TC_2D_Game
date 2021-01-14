@@ -4639,6 +4639,8 @@ MonoBehaviour:
   rectSmall: []
   destoryRow: 0000000000000000000000000000000000
   downHeight: []
+  textScore: {fileID: 212542746}
+  textLv: {fileID: 303971530}
 --- !u!4 &350019712
 Transform:
   m_ObjectHideFlags: 0

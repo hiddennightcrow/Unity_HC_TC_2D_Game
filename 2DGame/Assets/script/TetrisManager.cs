@@ -5,6 +5,7 @@ using System.Collections;
 
 public class TetrisManager : MonoBehaviour
 {
+    #region 欄位
     [Header("掉落時間"), Range(0.1f, 3)]
     public float speed = 1.5f;
     [Header("目前分數")]
@@ -39,7 +40,7 @@ public class TetrisManager : MonoBehaviour
         new Vector2(20,340)
    };
 
-
+    #endregion 
     /// <summary>
     /// 生成方塊
     /// </summary>
@@ -118,10 +119,12 @@ public class TetrisManager : MonoBehaviour
             float bottom = -320;
             float step = 40;
             var small = rectSmall.Where(x => x.anchoredPosition.y >= bottom + step * i - 10 && x.anchoredPosition.y <= bottom + step * i + 10);
+            //消除
             if (small.ToArray().Length == 16)
             {
                yield return StartCoroutine(Shine(small.ToArray()));
                 destoryRow[i] = true;
+                addscore(1000);
             }
         }
         downHeight = new float[traScoreArea.childCount];
@@ -228,7 +231,7 @@ public class TetrisManager : MonoBehaviour
 
             else
             {
-                speed = 1.5f;
+                speed = timeFllMax;
             }
             
                 
@@ -256,14 +259,26 @@ public class TetrisManager : MonoBehaviour
         Destroy(currentTeris.gameObject);
     }
 
+    [Header("分數文字")]
+    public Text textScore;
+    [Header("等級文字")]
+    public Text textLv;
+
+    private float timeFllMax = 1.5f;
     /// <summary>
     /// 添加分數
     /// </summary>
-    /// <param name="score"></param>
-    public void addscore(int score)
+    /// <param name="add"></param>
+    public void addscore(int add)
     {
-        score += 10;
-        print("累加後的數字" + score);
+        score += add;
+        textScore.text = "分數:" + score;
+        level = 1 + score / 1000;
+        textLv.text = "等級:" + level;
+
+        timeFllMax = 1.5f - level / 2;
+        timeFllMax = Mathf.Clamp(timeFllMax, 0.1f, 99f);
+        speed = timeFllMax;
 
     }
 
