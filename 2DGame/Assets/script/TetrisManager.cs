@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Linq;
 using System.Collections;
 
@@ -18,8 +19,10 @@ public class TetrisManager : MonoBehaviour
     public GameObject objFinal;
     [Header("方塊掉落音效")]
     public AudioClip sounddown;
-    [Header("方塊移動與旋轉音效")]
+    [Header("方塊移動音效")]
     public AudioClip soundmove;
+    [Header("方塊旋轉音效")]
+    public AudioClip soundturn;
     [Header("方塊消除音效")]
     public AudioClip soundclip;
     [Header("遊戲結束音效")]
@@ -40,6 +43,9 @@ public class TetrisManager : MonoBehaviour
         new Vector2(20,340)
    };
 
+    private bool fastDown;
+
+    private bool gameOver; 
     #endregion 
     /// <summary>
     /// 生成方塊
@@ -48,8 +54,20 @@ public class TetrisManager : MonoBehaviour
     public RectTransform currentTeris;
     public float timer;
 
+    private AudioSource aud;
+
+
+    private void Update()
+    {
+        if (gameOver) return;
+
+        ControlTertis();
+        
+        Fastdown();
+    }
     private void Start()
     {
+        aud = GetComponent<AudioSource>();
         Randomtetris();
 
 
@@ -78,7 +96,7 @@ public class TetrisManager : MonoBehaviour
         currentTeris = current.GetComponent<RectTransform>();
 
     }
-    private bool fastDown;
+  
     private void Fastdown()
     {
         if (currentTeris && !fastDown)
@@ -110,6 +128,8 @@ public class TetrisManager : MonoBehaviour
         for (int i = 0; i < traScoreArea.childCount; i++)
         {
             rectSmall[i] = traScoreArea.GetChild(i).GetComponent<RectTransform>();
+            float y = rectSmall[i].anchoredPosition.y;
+            if (y >= 320 - 10 && y <= 320 + 10) gameover();
         }
 
         int row = 17;
@@ -125,6 +145,7 @@ public class TetrisManager : MonoBehaviour
                yield return StartCoroutine(Shine(small.ToArray()));
                 destoryRow[i] = true;
                 addscore(1000);
+                aud.PlayOneShot(soundclip, Random.Range(0.8f, 1.2f));
             }
         }
         downHeight = new float[traScoreArea.childCount];
@@ -173,12 +194,7 @@ public class TetrisManager : MonoBehaviour
 
 
     }
-    private void Update()
-    {
-        ControlTertis();
-        
-        Fastdown();
-    }
+    
     private void ControlTertis()
     {
         if (currentTeris)
@@ -200,7 +216,9 @@ public class TetrisManager : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
                 {
+                    
                     currentTeris.anchoredPosition += new Vector2(40, 0);
+                aud.PlayOneShot(soundmove, Random.Range(0.8f, 1.2f));
                 }
 
             }
@@ -209,14 +227,18 @@ public class TetrisManager : MonoBehaviour
             {
                 if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
                 {
+                    
                     currentTeris.anchoredPosition -= new Vector2(40, 0);
+                    aud.PlayOneShot(soundmove, Random.Range(0.8f, 1.2f));
                 }
             }
             if (tetris.canRotate)
             {
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
+                    
                     currentTeris.eulerAngles += new Vector3(0, 0, 90);
+                    aud.PlayOneShot(soundturn, Random.Range(0.8f, 1.2f));
 
                     tetris.Offset();
                 }
@@ -227,9 +249,11 @@ public class TetrisManager : MonoBehaviour
                 if (Input.GetKey(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
             {
                 speed = 0.2f;
-            }
+                    aud.PlayOneShot(soundmove, Random.Range(0.8f, 1.2f));
 
-            else
+                }
+
+                else
             {
                 speed = timeFllMax;
             }
@@ -289,11 +313,33 @@ public class TetrisManager : MonoBehaviour
     {
     }
 
+    [Header("目前分數")]
+    public Text textCurrent;
+    [Header("最高分數")]
+    public Text textHeigth;
+
     /// <summary>
     /// 遊戲結束
     /// </summary>
     private void gameover()
     {
+        if (!gameOver)
+        {
+            aud.PlayOneShot(soundgameover, Random.Range(0.8f, 1.2f));
+            gameOver = true;
+            StopAllCoroutines();
+            objFinal.SetActive(true);
+
+            textCurrent.text = "目前分數:" + score;
+            if (score >= PlayerPrefs.GetInt("最高分數"))
+            {
+                PlayerPrefs.SetInt("最高分數", score);
+                textHeigth.text = "最高分數" + score;
+            }
+            else textHeigth.text = "最高分數:" + PlayerPrefs.GetInt("最高分數");
+        
+
+        }
     }
 
     /// <summary>
@@ -301,7 +347,7 @@ public class TetrisManager : MonoBehaviour
     /// </summary>
     public void restart()
     {
-
+        SceneManager.LoadScene("遊戲場景");
     }
 
     /// <summary>
@@ -309,13 +355,17 @@ public class TetrisManager : MonoBehaviour
     /// </summary>
     public void exitgame()
     {
+        Application.Quit();
+
     }
+
 
     private IEnumerator ShakeEffect()
     {
 
 
         RectTransform rect = traTetrisParent.GetComponent<RectTransform>();
+        aud.PlayOneShot(sounddown, Random.Range(0.8f, 1.2f));
 
 
         float interval = 0.05f;

@@ -41,52 +41,7 @@ public class Tetris : MonoBehaviour
     #region 事件
     private void OnDrawGizmos()
     {
-        #region 判定牆壁和地板
-        int z = (int)transform.eulerAngles.z;
-
-        if (z == 0 || z == 180)
-        {
-            length = length0;
-            Gizmos.color = Color.red;
-            Gizmos.DrawRay(transform.position, Vector3.right * length0);
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawRay(transform.position, -Vector3.right * length0);
-
-            lengthdown = length90;
-            Gizmos.color = Color.green;
-            Gizmos.DrawRay(transform.position, -Vector3.up * length90);
-
-            lengthRotateR = lengthRotate0r;
-            lengthRotateL = lengthRotate0l;
-            Gizmos.color = Color.blue;
-            Gizmos.DrawRay(transform.position, Vector3.right * lengthRotate0r);
-            Gizmos.DrawRay(transform.position, -Vector3.right * lengthRotate0l);
-
-
-
-
-        }
-        else if (z == 90 || z == 270)
-        {
-            length = length90;
-            Gizmos.color = Color.red;
-            Gizmos.DrawRay(transform.position, Vector3.right * length90);
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawRay(transform.position, -Vector3.right * length90);
-
-            lengthdown = length0;
-            Gizmos.color = Color.green;
-            Gizmos.DrawRay(transform.position, -Vector3.up * length0);
-
-            lengthRotateR = lengthRotate90r;
-            lengthRotateL = lengthRotate90l;
-            Gizmos.color = Color.blue;
-            Gizmos.DrawRay(transform.position, Vector3.right * lengthRotate90r);
-            Gizmos.DrawRay(transform.position, -Vector3.right * lengthRotate90l);
-
-
-        }
-        #endregion
+        
         #region 每一顆判定
         for (int i = 0; i < transform.childCount; i++)
         {
@@ -110,6 +65,7 @@ public class Tetris : MonoBehaviour
 
     private void Update()
     {
+        SettingLength();
         CheckWall();
         CheckBottom();
         CheckLeftAndRight();
@@ -124,6 +80,41 @@ public class Tetris : MonoBehaviour
         smallLeftAll = new bool[transform.childCount];
     }
     #endregion
+ private void SettingLength()
+    {
+        #region 判定牆壁和地板
+        int z = (int)transform.eulerAngles.z;
+
+        if (z == 0 || z == 180)
+        {
+            length = length0;
+           
+            lengthdown = length90;
+            
+
+            lengthRotateR = lengthRotate0r;
+            lengthRotateL = lengthRotate0l;
+            
+
+
+
+
+        }
+        else if (z == 90 || z == 270)
+        {
+            length = length90;
+           
+            lengthdown = length0;
+           
+            lengthRotateR = lengthRotate90r;
+            lengthRotateL = lengthRotate90l;
+           
+
+
+        }
+        #endregion
+    }
+
     public bool smallBottom;
     public bool smallRight;
     public bool smallLeft;
@@ -133,7 +124,7 @@ public class Tetris : MonoBehaviour
     public bool[] smallRightAll;
     public bool[] smallLeftAll;
 
-
+   
     private void CheckLeftAndRight()
     {
         //迴圈執行每一顆方塊
