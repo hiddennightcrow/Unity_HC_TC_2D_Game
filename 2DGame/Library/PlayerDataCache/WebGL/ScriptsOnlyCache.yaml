@@ -1,6 +1,7 @@
 ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
+    - ManuManager
     - Tetris
     - TetrisManager
     Unity.Rider.Editor.dll:
@@ -45,23 +46,80 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11234}
     - Class: 114
-      Script: {instanceID: 11258}
+      Script: {instanceID: 11254}
     - Class: 114
-      Script: {instanceID: 11416}
+      Script: {instanceID: 11412}
     - Class: 114
-      Script: {instanceID: 11506}
+      Script: {instanceID: 11502}
     - Class: 114
-      Script: {instanceID: 11842}
+      Script: {instanceID: 11838}
     - Class: 114
-      Script: {instanceID: 12222}
+      Script: {instanceID: 12218}
     - Class: 114
-      Script: {instanceID: 12312}
+      Script: {instanceID: 12308}
     - Class: 114
-      Script: {instanceID: 12702}
+      Script: {instanceID: 12700}
     - Class: 114
-      Script: {instanceID: 13056}
+      Script: {instanceID: 13054}
     - Class: 114
-      Script: {instanceID: 13064}
+      Script: {instanceID: 13062}
+    - Class: 115
+      Script: {instanceID: 0}
+    - Class: 128
+      Script: {instanceID: 0}
+    - Class: 157
+      Script: {instanceID: 0}
+    - Class: 196
+      Script: {instanceID: 0}
+    - Class: 198
+      Script: {instanceID: 0}
+    - Class: 199
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
+      Script: {instanceID: 0}
+    "Assets/\u5834\u666F/\u9078\u55AE.unity":
+    - Class: 1
+      Script: {instanceID: 0}
+    - Class: 4
+      Script: {instanceID: 0}
+    - Class: 20
+      Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
+    - Class: 28
+      Script: {instanceID: 0}
+    - Class: 48
+      Script: {instanceID: 0}
+    - Class: 81
+      Script: {instanceID: 0}
+    - Class: 82
+      Script: {instanceID: 0}
+    - Class: 83
+      Script: {instanceID: 0}
+    - Class: 104
+      Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 11234}
+    - Class: 114
+      Script: {instanceID: 11254}
+    - Class: 114
+      Script: {instanceID: 11412}
+    - Class: 114
+      Script: {instanceID: 11838}
+    - Class: 114
+      Script: {instanceID: 12218}
+    - Class: 114
+      Script: {instanceID: 12700}
+    - Class: 114
+      Script: {instanceID: 12716}
+    - Class: 114
+      Script: {instanceID: 13054}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -553,5 +611,6 @@ ScriptsOnlyBuild:
     className: PlayableTrack
   platform: 20
   scenePathNames:
+  - "Assets/\u5834\u666F/\u9078\u55AE.unity"
   - "Assets/\u5834\u666F/\u904A\u6232\u5834\u666F.unity"
   playerPath: D:/unity/Unity_HC_TC_2D_Game/Web
