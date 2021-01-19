@@ -78,6 +78,8 @@ public class Tetris : MonoBehaviour
         //偵測有幾個子物件(小方塊)就新增幾個陣列
         smallRightAll = new bool[transform.childCount];
         smallLeftAll = new bool[transform.childCount];
+
+        
     }
     #endregion
  private void SettingLength()
