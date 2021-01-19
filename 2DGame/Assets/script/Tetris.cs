@@ -61,28 +61,9 @@ public class Tetris : MonoBehaviour
         #endregion
 
     }
+   private void SettingLength()
 
 
-    private void Update()
-    {
-        SettingLength();
-        CheckWall();
-        CheckBottom();
-        CheckLeftAndRight();
-    }
-    private void Start()
-    {
-        length = length0;
-
-        rect = GetComponent<RectTransform>();
-        //偵測有幾個子物件(小方塊)就新增幾個陣列
-        smallRightAll = new bool[transform.childCount];
-        smallLeftAll = new bool[transform.childCount];
-
-        
-    }
-    #endregion
- private void SettingLength()
     {
         #region 判定牆壁和地板
         int z = (int)transform.eulerAngles.z;
@@ -116,7 +97,26 @@ public class Tetris : MonoBehaviour
         }
         #endregion
     }
+ private void Update()
+    {
+        SettingLength();
+        CheckWall();
+        CheckBottom();
+        CheckLeftAndRight();
+    }
+    private void Start()
+    {
+        length = length0;
 
+        rect = GetComponent<RectTransform>();
+        //偵測有幾個子物件(小方塊)就新增幾個陣列
+        smallRightAll = new bool[transform.childCount];
+        smallLeftAll = new bool[transform.childCount];
+
+        
+    }
+    #endregion
+ 
     public bool smallBottom;
     public bool smallRight;
     public bool smallLeft;

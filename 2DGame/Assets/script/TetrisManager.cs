@@ -76,7 +76,7 @@ public class TetrisManager : MonoBehaviour
     {
 
         indexNext = Random.Range(0, 7);
-        indexNext = 0;
+        
         traNextArea.GetChild(indexNext).gameObject.SetActive(true);
 
     }
